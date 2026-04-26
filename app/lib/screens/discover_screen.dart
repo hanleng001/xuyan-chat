@@ -38,7 +38,7 @@ class DiscoverScreen extends StatelessWidget {
             subtitle: '搜索添加好友',
             color: Colors.green,
             onTap: () {
-              // TODO: Navigate to search users
+              Navigator.of(context).pushNamed('/search');
             },
           ),
           const SizedBox(height: 12),

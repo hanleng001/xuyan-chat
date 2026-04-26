@@ -109,7 +109,10 @@ class _AiChatScreenState extends State<AiChatScreen> {
         },
       );
 
-      final reply = response.data['choices'][0]['message']['content'];
+      final choices = response.data['choices'] as List?;
+      final reply = (choices != null && choices.isNotEmpty)
+          ? (choices[0]['message']['content'] as String? ?? 'AI 响应为空')
+          : 'AI 响应格式异常';
       setState(() {
         _messages.add({
           'role': 'assistant',
@@ -134,7 +137,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
 
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
+      if (mounted && _scrollController.hasClients) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
           duration: Duration(milliseconds: 300),

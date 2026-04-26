@@ -107,10 +107,12 @@ class _SplashScreenState extends State<SplashScreen>
         );
       }
     } catch (e) {
+      // 网络错误或检查更新失败时忽略，不阻塞应用启动
       print('Update check failed: $e');
+    } finally {
+      // 无论成功失败都要标记为检查完成，否则 app 永远卡在启动页
+      _updateChecked = true;
     }
-    
-    _updateChecked = true;
   }
 
   @override

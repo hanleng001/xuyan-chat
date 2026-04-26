@@ -127,7 +127,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
+      if (mounted && _scrollController.hasClients) {
         _scrollController.animateTo(
           0,
           duration: const Duration(milliseconds: 300),
@@ -302,7 +302,12 @@ class _ChatScreenState extends State<ChatScreen> {
         },
       );
 
-      final reply = response.data['choices'][0]['message']['content'] as String;
+      final choices = response.data['choices'] as List?;
+      if (choices == null || choices.isEmpty) {
+        if (mounted) setState(() => _aiSuggestions = ['好的👍', '收到', '嗯嗯']);
+        return;
+      }
+      final reply = (choices[0]['message']['content'] as String? ?? '');
       final suggestions = reply
           .split('\n')
           .map((s) => s.trim())

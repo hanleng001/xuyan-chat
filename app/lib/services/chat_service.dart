@@ -76,10 +76,10 @@ class ChatService {
   }
 
   // 清空聊天记录
-  // DELETE /api/chat/messages/:friendId
+  // DELETE /api/chat/conversations/:friendId
   Future<void> clearMessages(String friendId) async {
     try {
-      await _api.delete('${ApiEndpoints.chatMessages}/$friendId');
+      await _api.delete('${ApiEndpoints.conversations}/$friendId');
     } on DioException catch (e) {
       throw _handleError(e);
     }
