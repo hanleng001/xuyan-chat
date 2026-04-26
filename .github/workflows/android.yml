@@ -7,14 +7,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Flutter
         run: |
-          git clone --depth 1 --branch stable https://github.com/flutter/flutter.git /opt/flutter
-          echo "/opt/flutter/bin" >> $GITHUB_PATH
-          flutter precache
-      - run: flutter --version
+          git clone --depth 1 --branch 3.24.0 https://github.com/flutter/flutter.git /opt/flutter
+          /opt/flutter/bin/flutter precache
+          /opt/flutter/bin/flutter --version
       - working-directory: ./app
         run: |
-          flutter pub get
-          flutter build apk --release
+          /opt/flutter/bin/flutter pub get
+          /opt/flutter/bin/flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
           name: apk
