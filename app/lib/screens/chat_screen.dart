@@ -262,7 +262,14 @@ class _ChatScreenState extends State<ChatScreen> {
           : 'https://integrate.api.nvidia.com/v1';
       final effectiveApiKey = apiKey?.isNotEmpty == true 
           ? apiKey! 
-          : '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';
+          : null;
+
+      if (effectiveApiKey == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('请先在设置中配置AI密钥')),
+        );
+        return;
+      }
 
       final conversationContext = recentMessages.map((m) {
         final role = m.isMe ? '我' : widget.friendName;
@@ -359,7 +366,14 @@ class _ChatScreenState extends State<ChatScreen> {
           : 'https://integrate.api.nvidia.com/v1';
       final effectiveApiKey = apiKey?.isNotEmpty == true 
           ? apiKey! 
-          : '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';
+: null;
+
+      if (apiKey?.isNotEmpty != true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('请先在设置中配置AI密钥')),
+        );
+        return;
+      }
 
       final messages = chatProvider.getMessages(widget.friendId);
       final recentMessages = messages.take(10).toList().reversed.toList();

@@ -81,7 +81,16 @@ class _AiChatScreenState extends State<AiChatScreen> {
       final dio = Dio();
       final baseUrl = _baseUrl?.isNotEmpty == true ? _baseUrl! : 'https://integrate.api.nvidia.com/v1';
       final model = _currentModel?.isNotEmpty == true ? _currentModel! : 'meta/llama-3.1-8b-instruct';
-      final apiKey = _apiKey?.isNotEmpty == true ? _apiKey! : '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';
+      final apiKey = _apiKey?.isNotEmpty == true ? _apiKey! : null;
+      if (apiKey == null) {
+        setState(() { _isLoading = false; });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('请先在设置中配置AI密钥')),
+          );
+        }
+        return;
+      }
 
       final response = await dio.post(
         '$baseUrl/chat/completions',
