@@ -8,12 +8,15 @@ jobs:
       - name: Install Flutter
         run: |
           git clone --depth 1 --branch 3.24.0 https://github.com/flutter/flutter.git /opt/flutter
-          /opt/flutter/bin/flutter precache
+          /opt/flutter/bin/flutter precache --android
           /opt/flutter/bin/flutter --version
-      - working-directory: ./app
+      - name: Debug dirs
         run: |
-          /opt/flutter/bin/flutter pub get
-          /opt/flutter/bin/flutter build apk --release
+          pwd && ls -la
+          ls -la app/ 2>/dev/null || echo "no app dir"
+      - name: Build APK
+        run: |
+          cd app && /opt/flutter/bin/flutter pub get && /opt/flutter/bin/flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
           name: apk
