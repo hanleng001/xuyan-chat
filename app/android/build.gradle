@@ -13,6 +13,20 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
+// Fix missing namespace for older plugins (record, etc.) with AGP 8.x
+gradle.beforeProject { project ->
+    project.pluginManager.withPlugin("com.android.library") {
+        def android = project.extensions.findByName("android")
+        if (android != null && android.namespace == null) {
+            def manifest = file("${project.projectDir}/src/main/AndroidManifest.xml")
+            if (manifest.exists()) {
+                def pkg = new XmlSlurper().parse(manifest).@package.toString()
+                if (pkg) android.namespace = pkg
+            }
+        }
+    }
+}
+
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
