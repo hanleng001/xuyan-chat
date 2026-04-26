@@ -5,14 +5,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Flutter
-        uses: actions/setup-flutter@v4
-        with:
-          channel: stable
-          version: 3.24.0
-      - run: flutter pub get
-      - run: flutter build apk --release
+      - name: Install Flutter
+        run: |
+          git clone --depth 1 --branch stable https://github.com/flutter/flutter.git /opt/flutter
+          echo "/opt/flutter/bin" >> $GITHUB_PATH
+          flutter precache
+      - run: flutter --version
+      - working-directory: ./app
+        run: |
+          flutter pub get
+          flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: app/build/app/outputs/flutter-apk/app-release.apk
